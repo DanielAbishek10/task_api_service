@@ -6,23 +6,23 @@ router = APIRouter()
 def index():
     return {'msg': 'empty'}
 
-@router.get('/groupBy',status_code=200)
-def getGroupedValues(groupByOne = None, groupByTwo = None):
+@router.get('/groupBy',status_code=201)
+def getGroupedValues(user,groupByOne=None, groupByTwo=None):
     if groupByOne == 'undefined' or groupByTwo == 'undefined':
-        print('1')
-        if groupByOne =='undefined':
-            print('2')
+        if groupByOne =='undefined' and groupByTwo != 'undefined':
             groupByOne = None
-        elif groupByTwo == 'undefined':
-            print('3')
+        elif groupByTwo == 'undefined' and groupByOne != 'undefined':
             groupByTwo = None
         else:
-            print('4')
-            groupByOne,groupByTwo = None
+            groupByOne,groupByTwo = None,None
     try:   
         print(f"group by one = {groupByOne}, group by two = {groupByTwo}")
-        result =payment_service.getGroupedValues(groupByOne,groupByTwo)
-        print(result)
+        result =payment_service.getGroupedValues(user,groupByOne,groupByTwo)
         return result
     except Exception as ex:
         print(ex)
+
+@router.get('/sortData')
+async def getSortedData(user,cardName, page_no, no_of_data, column='ID', column_one=None, column_two=None, is_sorted:bool = False):
+    print(user,cardName, column,column_one,page_no,no_of_data, column_two, is_sorted)
+    return payment_service.getSortedData(user,cardName, column,column_one,page_no,no_of_data, column_two, is_sorted)
